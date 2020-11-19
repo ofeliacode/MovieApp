@@ -67,8 +67,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         title = "Movie app"
         
     }
-    
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -83,17 +81,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.setup(movie)
         return cell
     }
-    
-    
 }
 
 extension ViewController: UISearchBarDelegate {
-    
 func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    movies.removeAll()
+   
 URLSession.shared.dataTask(with: URL(string:
 "https://api.themoviedb.org/3/search/movie?api_key=dfc41d3d13bc64503f9270485fa8746f&query=\(searchText)&page=\(page)")!,
-  completionHandler: { data, response, error in
+  completionHandler: { [weak self] data, response, error in
     guard let data = data, error == nil else {
         return
     }
@@ -109,14 +104,15 @@ URLSession.shared.dataTask(with: URL(string:
     }
     let newMovies = finalResult.results
     print(newMovies)
-    self.movies.append(contentsOf: newMovies)
     
+    self?.movies = newMovies
+   
     DispatchQueue.main.async {
-        
-        self.collectionView?.reloadData()
+        self?.collectionView?.reloadData()
     }
+    
    }).resume()
-}
+  }
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
