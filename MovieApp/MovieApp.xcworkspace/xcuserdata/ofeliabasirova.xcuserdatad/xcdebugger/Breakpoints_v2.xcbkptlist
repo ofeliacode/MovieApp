@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "5165A271-8628-4D27-86C0-5C50CEEA86EF"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7069171E-6CC6-4AB6-B29D-C1C1A71A290C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MovieApp/Model/MovieData.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "Movie"
+            landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "7069171E-6CC6-4AB6-B29D-C1C1A71A290C - e7e3a4bb352d02ed"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MovieApp.Movie.(CodingKeys in _8096B88BF4CF7A80D31ABCBBF760ACDB).init(rawValue: Swift.String) -&gt; Swift.Optional&lt;MovieApp.Movie.(CodingKeys in _8096B88BF4CF7A80D31ABCBBF760ACDB)&gt;"
+                  moduleName = "MovieApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ofeliabasirova/Desktop/movieapp/MovieApp/MovieApp/Model/MovieData.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "167">
+               </Location>
+               <Location
+                  uuid = "7069171E-6CC6-4AB6-B29D-C1C1A71A290C - 6c70acce48dabcc9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MovieApp.Movie.(CodingKeys in _8096B88BF4CF7A80D31ABCBBF760ACDB).rawValue.getter : Swift.String"
+                  moduleName = "MovieApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ofeliabasirova/Desktop/movieapp/MovieApp/MovieApp/Model/MovieData.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "112">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
