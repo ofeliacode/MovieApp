@@ -8,8 +8,8 @@
 import Foundation
 
 class MovieViewModel {
-    private var moviesManager = MovieManager()
-    private var movies        = [Movie]()
+   var moviesManager = MovieManager()
+   var movies        = [Movie]()
     
     func fetchMoviesData(comletion: @escaping () -> ()) {
         moviesManager.request { (result) in

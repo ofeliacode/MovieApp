@@ -8,17 +8,12 @@
 import UIKit
 import Foundation
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
     var collectionView : UICollectionView?
-    private var movieModel = MovieViewModel()
-    
+    var movieModel = MovieViewModel()
     let searchController = UISearchController(searchResultsController: nil)
     var page = 1
     var movieManager = MovieManager()
-    var movieData: MoviesData? = nil
-    var movies = [Movie]()
-    //Mark: = Heading
-    
+       
 
     private func showSearchBar(){
         navigationItem.searchController = searchController
@@ -62,8 +57,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         showSearchBar()
         setupCollectionview()
         loadMoviesData()
-        navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.tintColor = .blue
+        navigationController?.navigationBar.barTintColor = .lightGray
+        navigationController?.navigationBar.tintColor = .red
         title = "Movie app"
         
     }
@@ -105,7 +100,7 @@ URLSession.shared.dataTask(with: URL(string:
     let newMovies = finalResult.results
     print(newMovies)
     
-    self?.movies = newMovies
+    self?.movieModel.movies = newMovies
    
     DispatchQueue.main.async {
         self?.collectionView?.reloadData()
