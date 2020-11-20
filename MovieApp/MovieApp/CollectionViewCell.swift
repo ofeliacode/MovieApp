@@ -84,6 +84,7 @@ class CollectionViewCell: UICollectionViewCell {
                 textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             ])
             self.textLabel = textLabel
+            textLabel.font = UIFont.boldSystemFont(ofSize: 20.0)
             self.textLabel.textAlignment = .left
         }
 

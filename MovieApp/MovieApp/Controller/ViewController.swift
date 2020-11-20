@@ -11,7 +11,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var collectionView : UICollectionView?
     var movieModel = MovieViewModel()
     let searchController = UISearchController(searchResultsController: nil)
-    var page = 1
+    var page = 4
     var movieManager = MovieManager()
        
 
@@ -76,14 +76,20 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.setup(movie)
         return cell
     }
+ func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == movieModel.movies.count - 1 {
+            page += 1
+        }
+    }
+  
 }
 
 extension ViewController: UISearchBarDelegate {
-func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
    
-URLSession.shared.dataTask(with: URL(string:
-"https://api.themoviedb.org/3/search/movie?api_key=dfc41d3d13bc64503f9270485fa8746f&query=\(searchText)&page=\(page)")!,
-  completionHandler: { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: URL(string:
+        "https://api.themoviedb.org/3/search/movie?api_key=dfc41d3d13bc64503f9270485fa8746f&query=\(searchText)&page=\(page)")!,
+        completionHandler: { [weak self] data, response, error in
     guard let data = data, error == nil else {
         return
     }
@@ -105,7 +111,7 @@ URLSession.shared.dataTask(with: URL(string:
     DispatchQueue.main.async {
         self?.collectionView?.reloadData()
     }
-    
+  
    }).resume()
   }
 }
