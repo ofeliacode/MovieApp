@@ -11,7 +11,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var collectionView : UICollectionView?
     var movieModel = MovieViewModel()
     let searchController = UISearchController(searchResultsController: nil)
-    var page = 4
+    var page = 1
     var movieManager = MovieManager()
        
 
@@ -76,19 +76,53 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.setup(movie)
         return cell
     }
+    
+  func getrequest() {
+    URLSession.shared.dataTask(with: URL(string:
+    "https://api.themoviedb.org/3/movie/popular?api_key=dfc41d3d13bc64503f9270485fa8746f&page=\(page)")!,
+       completionHandler: { [weak self] data, response, error in
+        guard let data = data, error == nil else {
+        return
+        }
+        var result: MoviesData?
+        do {
+        result = try JSONDecoder().decode(MoviesData.self, from: data)
+        }
+        catch {
+        print("error")
+        }
+        guard let finalResult = result else {
+        return
+        }
+        let newMovies = finalResult.results
+        print(newMovies)
+
+        self?.movieModel.movies.append(contentsOf: newMovies)
+
+        
+        DispatchQueue.main.async {
+        self?.collectionView?.reloadData()
+        }
+
+        }).resume()
+   
+}
+    
+    
  func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == movieModel.movies.count - 1 {
-            page += 1
+    page += 1
+    if indexPath.row == movieModel.movies.count - 1 {
+        getrequest()
         }
     }
   
 }
 
 extension ViewController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-   
-        URLSession.shared.dataTask(with: URL(string:
-        "https://api.themoviedb.org/3/search/movie?api_key=dfc41d3d13bc64503f9270485fa8746f&query=\(searchText)&page=\(page)")!,
+        page = 1
+        URLSession.shared.dataTask(with: URL(string: "https://api.themoviedb.org/3/search/movie?api_key=dfc41d3d13bc64503f9270485fa8746f&query=\(searchText)&page=\(page)")!,
         completionHandler: { [weak self] data, response, error in
     guard let data = data, error == nil else {
         return
@@ -102,17 +136,20 @@ extension ViewController: UISearchBarDelegate {
     }
     guard let finalResult = result else {
         return
+       
     }
+            
     let newMovies = finalResult.results
     print(newMovies)
-    
+           
     self?.movieModel.movies = newMovies
-   
+            print(self?.movieModel.movies)
     DispatchQueue.main.async {
         self?.collectionView?.reloadData()
     }
-  
+            
    }).resume()
+        
   }
 }
 
