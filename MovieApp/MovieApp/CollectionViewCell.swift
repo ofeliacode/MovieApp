@@ -44,8 +44,7 @@ class CollectionViewCell: UICollectionViewCell {
             
             DispatchQueue.main.async {
                 if let image = UIImage(data: data) {
-                    self.imageView.image = image
-                }
+                    self.imageView.image = image                }
             }
         
         }.resume()
@@ -75,7 +74,7 @@ class CollectionViewCell: UICollectionViewCell {
                 imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
                 imageView.heightAnchor.constraint(equalToConstant: 120),
                 imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-                imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 16/15),
+                imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 3/4),
             ])
             NSLayoutConstraint.activate([
                 textLabel.centerYAnchor.constraint(equalTo: centerYAnchor),

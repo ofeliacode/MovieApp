@@ -6,8 +6,13 @@
 //
 
 import UIKit
+
+import RealmSwift
+
 import Foundation
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+ var limit:Int = 3
+   
     var collectionView : UICollectionView?
     var movieModel = MovieViewModel()
     let searchController = UISearchController(searchResultsController: nil)
@@ -32,7 +37,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.frame = view.bounds
         collectionView.backgroundColor = .white
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,22 +49,30 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.collectionView = collectionView
         collectionView.alwaysBounceVertical = false
     }
+
     private func loadMoviesData() {
         movieModel.fetchMoviesData { [weak self] in
-        self?.collectionView?.dataSource = self
-        self?.collectionView?.delegate = self
         self?.collectionView?.reloadData()
         }
     }
+    let realm = try! Realm()
+    func fetchMoviesFromRealmDB () {
+        let realm = try! Realm()
+        let objects = realm.objects(Movie.self)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+          // realm.beginWrite()
+         //realm.delete(realm.objects(Movie.self))
+        // try! realm.commitWrite()
+        fetchMoviesFromRealmDB()
+        collectionView?.reloadData()
         showSearchBar()
         setupCollectionview()
         loadMoviesData()
         navigationController?.navigationBar.barTintColor = .lightGray
         navigationController?.navigationBar.tintColor = .red
         title = "Movie app"
-        
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -81,41 +93,43 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     URLSession.shared.dataTask(with: URL(string:
     "https://api.themoviedb.org/3/movie/popular?api_key=dfc41d3d13bc64503f9270485fa8746f&page=\(page)")!,
        completionHandler: { [weak self] data, response, error in
-        guard let data = data, error == nil else {
-        return
+          guard let data = data, error == nil else {
+          return
         }
         var result: MoviesData?
         do {
-        result = try JSONDecoder().decode(MoviesData.self, from: data)
+         result = try JSONDecoder().decode(MoviesData.self, from: data)
         }
-        catch {
-        print("error")
+         catch {
+          print("error")
         }
-        guard let finalResult = result else {
-        return
+         guard let finalResult = result else {
+          return
         }
         let newMovies = finalResult.results
-        print(newMovies)
-
-        self?.movieModel.movies.append(contentsOf: newMovies)
-
+         self?.movieModel.movies.append(contentsOf: newMovies)
         
-        DispatchQueue.main.async {
-        self?.collectionView?.reloadData()
-        }
-
+         DispatchQueue.main.async {
+            let realm = try! Realm()
+            realm.beginWrite()
+            realm.add((self?.movieModel.movies)!)
+            try! realm.commitWrite()
+            self?.collectionView?.reloadData()
+         }
         }).resume()
    
 }
     
     
+    
  func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
     page += 1
-    if indexPath.row == movieModel.movies.count - 1 {
+    
+    if indexPath.row == movieModel.movies.count - 1 &&  movieModel.movies.count <= 60 {
         getrequest()
+        fetchMoviesFromRealmDB()
         }
     }
-  
 }
 
 extension ViewController: UISearchBarDelegate {
@@ -136,18 +150,12 @@ extension ViewController: UISearchBarDelegate {
     }
     guard let finalResult = result else {
         return
-       
     }
-            
     let newMovies = finalResult.results
-    print(newMovies)
-           
     self?.movieModel.movies = newMovies
-            print(self?.movieModel.movies)
     DispatchQueue.main.async {
         self?.collectionView?.reloadData()
     }
-            
    }).resume()
         
   }

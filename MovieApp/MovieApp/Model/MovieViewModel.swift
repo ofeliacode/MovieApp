@@ -6,13 +6,14 @@
 //
 
 import Foundation
-
+import RealmSwift
 class MovieViewModel {
    var moviesManager = MovieManager()
    var movies        = [Movie]()
     
     func fetchMoviesData(comletion: @escaping () -> ()) {
         moviesManager.request { (result) in
+            
             switch result {
             case .success(let listOf):
                 self.movies = listOf.results
@@ -20,7 +21,10 @@ class MovieViewModel {
             case .failure(let error):
                 print(error)
             }
+            
+            
         }
+      
     }
     func numberOfRowInSections(section: Int) -> Int {
         if movies.count != 0 {

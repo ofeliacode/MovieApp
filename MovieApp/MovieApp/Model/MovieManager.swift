@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import RealmSwift
+import Realm
 
 struct MovieManager {
     
