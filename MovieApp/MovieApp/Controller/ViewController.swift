@@ -20,7 +20,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var movieManager = MovieManager()
        
 
-    private func showSearchBar(){
+    private func showSearchBar() {
         navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search here..."
@@ -55,16 +55,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self?.collectionView?.reloadData()
         }
     }
-    let realm = try! Realm()
-    func fetchMoviesFromRealmDB () {
+    func fetchMoviesFromRealmDB() {
         let realm = try! Realm()
-        let objects = realm.objects(Movie.self)
+        let results = realm.objects(Movie.self)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-          // realm.beginWrite()
-         //realm.delete(realm.objects(Movie.self))
-        // try! realm.commitWrite()
+       // realm.beginWrite()
+       // realm.delete(realm.objects(Movie.self))
+       // try! realm.commitWrite()
         fetchMoviesFromRealmDB()
         collectionView?.reloadData()
         showSearchBar()
@@ -74,12 +74,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.navigationBar.tintColor = .red
         title = "Movie app"
     }
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movieModel.numberOfRowInSections(section: section)
+//        let count = movieModel.numberOfRowInSections(section: section)
+//        if count <= 100 {
+//            return count
+//        } else {
+//            return 100
+//        }
+        
+        return  min(movieModel.numberOfRowInSections(section: section), 100)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -89,7 +92,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
-  func getrequest() {
+  func  getrequest() {
     URLSession.shared.dataTask(with: URL(string:
     "https://api.themoviedb.org/3/movie/popular?api_key=dfc41d3d13bc64503f9270485fa8746f&page=\(page)")!,
        completionHandler: { [weak self] data, response, error in
@@ -108,6 +111,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         let newMovies = finalResult.results
          self?.movieModel.movies.append(contentsOf: newMovies)
+        self?.page += 1
         
          DispatchQueue.main.async {
             let realm = try! Realm()
@@ -123,11 +127,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
  func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-    page += 1
-    
     if indexPath.row == movieModel.movies.count - 1 &&  movieModel.movies.count <= 60 {
         getrequest()
-        fetchMoviesFromRealmDB()
         }
     }
 }
@@ -136,6 +137,7 @@ extension ViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         page = 1
+        
         URLSession.shared.dataTask(with: URL(string: "https://api.themoviedb.org/3/search/movie?api_key=dfc41d3d13bc64503f9270485fa8746f&query=\(searchText)&page=\(page)")!,
         completionHandler: { [weak self] data, response, error in
     guard let data = data, error == nil else {
@@ -187,5 +189,4 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets.init(top: 8, left: 8, bottom: 8, right: 8)
     }
 }
-
 
