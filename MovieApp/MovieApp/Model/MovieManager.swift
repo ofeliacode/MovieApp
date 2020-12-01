@@ -8,12 +8,8 @@
 import Foundation
 import RealmSwift
 import Realm
-
-struct MovieManager {
-    
-    mutating func request(completion: @escaping (Result<MoviesData, Error>) -> Void) {
-        let urlString =
-        "https://api.themoviedb.org/3/movie/popular?api_key=dfc41d3d13bc64503f9270485fa8746f&page=1"
+class MovieManager {
+    func request(from urlString: String, completion: @escaping (Result<MoviesData, Error>) -> Void) {
         guard let url = URL(string: urlString) else {return}
          URLSession.shared.dataTask(with: url) { (data, response, error) in
             DispatchQueue.main.async {
@@ -25,6 +21,7 @@ struct MovieManager {
                 guard let data = data else {return}
                 do {
                     let movies = try JSONDecoder().decode(MoviesData.self, from: data)
+                    print("moviemanger duties:\(movies)")
                     completion(.success(movies))
                 } catch let jsonError {
                     completion(.failure(jsonError))

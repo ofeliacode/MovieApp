@@ -30,9 +30,25 @@
             filePath = "MovieApp/Model/MovieViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "fetchMoviesData(comletion:)"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "fetchMoviesData(url:comletion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2EB46509-9309-4489-8593-521C07C822D4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MovieApp/Model/MovieManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "request(from:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

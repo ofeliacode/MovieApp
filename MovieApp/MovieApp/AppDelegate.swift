@@ -20,19 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = UINavigationController(rootViewController: vc)
         
         print(Realm.Configuration.defaultConfiguration.fileURL)
-     
-        
-       /* do {
-            let realm = try Realm()
-            try realm.write {
-            }
-        } catch {
-            print("error of realm")
-        }*/
         return true
     }
-
-
-
 }
 
