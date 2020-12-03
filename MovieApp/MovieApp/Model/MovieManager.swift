@@ -6,28 +6,21 @@
 //
 
 import Foundation
-import RealmSwift
-import Realm
+
 class MovieManager {
-    func request(from urlString: String, completion: @escaping (Result<MoviesData, Error>) -> Void) {
-        guard let url = URL(string: urlString) else {return}
+    
+    func request(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
          URLSession.shared.dataTask(with: url) { (data, response, error) in
             DispatchQueue.main.async {
                 if let error = error {
-                    print("error")
                     completion(.failure(error))
                     return
                 }
                 guard let data = data else {return}
-                do {
-                    let movies = try JSONDecoder().decode(MoviesData.self, from: data)
-                    print("moviemanger duties:\(movies)")
-                    completion(.success(movies))
-                } catch let jsonError {
-                    completion(.failure(jsonError))
-                }
+                completion(.success(data))
             }
         }.resume()
     }
 }
+
 

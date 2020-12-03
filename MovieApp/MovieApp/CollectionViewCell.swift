@@ -9,17 +9,35 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
     static let identifier = "cellIdentifier"
-    weak var textLabel: UILabel!
     private var urlStringOfPoster: String = ""
     
-    //
+    var descriptionOfMovie: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        label.numberOfLines = 0
+        return label
+    }()
+    let imageView: UIImageView = {
+            let img = UIImageView()
+            img.clipsToBounds = true
+            return img
+    }()
+    let titleOfMovie: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.font = UIFont.boldSystemFont(ofSize: 20.0)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    //Mark: = Functions
     func setup(_ movie: Movie) {
-        updateUI(title: movie.title, poster: movie.posterImage)
+        updateUI(title: movie.title, poster: movie.posterImage, overview: movie.overview)
     }
     
-    //
-    func updateUI(title: String?, poster: String?) {
-        textLabel.text = title
+    func updateUI(title: String?, poster: String?, overview: String?) {
+        titleOfMovie.text = title
+        descriptionOfMovie.text = overview
         guard let posterString = poster else {return}
         
         urlStringOfPoster = "https://image.tmdb.org/t/p/w300" + posterString
@@ -31,8 +49,7 @@ class CollectionViewCell: UICollectionViewCell {
         imageView.image = nil
         getImageFromURL(url: posterImageURL)
     }
-    
-    //
+  
     func getImageFromURL(url: URL) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             // поймать ошибку
@@ -50,24 +67,13 @@ class CollectionViewCell: UICollectionViewCell {
         }.resume()
     }
     
-    //
-    let imageView: UIImageView = {
-            let img = UIImageView()
-            img.clipsToBounds = true
-            //img.translatesAutoresizingMaskIntoConstraints = false
-            return img
-    }()
-    
-    //
         override init(frame: CGRect) {
             super.init(frame: frame)
-
-            let textLabel = UILabel(frame: .zero)
-            
-            self.contentView.addSubview(textLabel)
+            self.contentView.addSubview(descriptionOfMovie)
+            self.contentView.addSubview(titleOfMovie)
             self.contentView.addSubview(imageView)
-            
-            textLabel.translatesAutoresizingMaskIntoConstraints = false
+            descriptionOfMovie.translatesAutoresizingMaskIntoConstraints = false
+            titleOfMovie.translatesAutoresizingMaskIntoConstraints = false
             imageView.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
@@ -77,14 +83,18 @@ class CollectionViewCell: UICollectionViewCell {
                 imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 3/4),
             ])
             NSLayoutConstraint.activate([
-                textLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-                textLabel.heightAnchor.constraint(equalToConstant: 80),
-                textLabel.leadingAnchor.constraint(equalTo:imageView.trailingAnchor, constant: 20),
-                textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+                titleOfMovie.heightAnchor.constraint(equalToConstant: 20),
+                titleOfMovie.leadingAnchor.constraint(equalTo:imageView.trailingAnchor, constant: 20),
+                titleOfMovie.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             ])
-            self.textLabel = textLabel
-            textLabel.font = UIFont.boldSystemFont(ofSize: 20.0)
-            self.textLabel.textAlignment = .left
+            NSLayoutConstraint.activate([
+                descriptionOfMovie.centerYAnchor.constraint(equalTo: centerYAnchor),
+                descriptionOfMovie.topAnchor.constraint(equalTo: titleOfMovie.bottomAnchor),
+                descriptionOfMovie.heightAnchor.constraint(equalToConstant: 80),
+                descriptionOfMovie.leadingAnchor.constraint(equalTo:imageView.trailingAnchor, constant: 20),
+                descriptionOfMovie.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            ])
+            
         }
 
         required init?(coder aDecoder: NSCoder) {

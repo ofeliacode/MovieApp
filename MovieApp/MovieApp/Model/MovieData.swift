@@ -6,22 +6,15 @@
 //
 
 import Foundation
-import Realm
-import RealmSwift
 
-class MoviesData: Object, Codable {
-    @objc dynamic var pages: Int
-    var results = Array<Movie>()
-    private enum CodingKeys: String, CodingKey {
-        case pages = "total_pages"
-        case results
-    }
+struct MoviesData: Codable {
+    var results: [Movie]
 }
-class Movie: Object, Codable {
-    @objc dynamic var title: String?
-    @objc dynamic var year: String?
-    @objc dynamic var posterImage: String?
-    @objc dynamic var overview: String?
+struct Movie:  Codable {
+   var title: String?
+   var year: String?
+   var posterImage: String?
+   var overview: String?
     private enum CodingKeys: String, CodingKey {
         case title, overview
         case year = "release_date"
