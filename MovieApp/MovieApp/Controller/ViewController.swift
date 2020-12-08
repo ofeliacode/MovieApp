@@ -6,14 +6,11 @@
 //
 
 import UIKit
-
-import RealmSwift
-
 import Foundation
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    //Mark: = Variables
+    //MARK: - Variables
     let searchController = UISearchController(searchResultsController: nil)
     var movieModel = MovieViewModel()
     var moviesArray: MoviesData?
@@ -21,8 +18,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var numberPageOfMoviesResult: Int = 1
     var numberPageOfSearchMoviesResult: Int = 1
     var searchText: String = ""
+    private var timer: Timer?
     
-    //Mark: = override
+   //MARK: -  override
     override func viewDidLoad() {
         super.viewDidLoad()
         // realm.beginWrite()
@@ -34,8 +32,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         loadMoviesData()
         title = "Movie app"
     }
-    
-    //Mark: = Functions
+  //MARK: - Functions
     private func showSearchBar() {
         navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
@@ -45,7 +42,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.navigationBar.tintColor = .systemGray
     }
     
-    //Mark: = Setup Collectionview
+    //MARK: - Setup Collectionview
     func setupCollectionview() {
         super.loadView()
         let layout = UICollectionViewFlowLayout()
@@ -68,8 +65,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         ])
         self.collectionView = collectionView
     }
-   
-    //Mark: = loading movies into collectionView on the frist screen
+    
+ //MARK: - loading movies into collectionView on the frist screen
     private func loadMoviesData() {
         movieModel.fetchMoviesForCollectionView(pageNumber: numberPageOfMoviesResult, completion: { (loadedMovies) in
             self.moviesArray = loadedMovies
@@ -77,7 +74,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         })
     }
     
-    //Mark: = Pagination for first screen of movies results
+  //MARK: - Pagination for first screen of movies results
     func fetchNextPageOfloadedMovies() {
         movieModel.fetchMoviesForCollectionView(pageNumber: numberPageOfMoviesResult) { loadedNewPage in
             guard let newPage = loadedNewPage else { return }
@@ -87,7 +84,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    //Mark: = UICollectionView
+    //MARK: - Pagination: Fetch new page of movies for search results
+    func fetchNextPageOfSearchResults() {
+        movieModel.fetchResultOfSearchBar(searchText: searchText,
+           pageNumber: numberPageOfSearchMoviesResult) { searchResults in
+            guard let newPageOfResults = searchResults else { return }
+            for item in newPageOfResults.results {
+                self.moviesArray?.results.append(item)
+            }
+        }
+    }
+    
+    //MARK: - UICollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //        let count = movieModel.numberOfRowInSections(section: section)
         //        if count <= 100 {
@@ -116,7 +124,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 numberPageOfMoviesResult += 1
                 collectionView?.reloadData()
             } else {
-               //fetchNextPageOfSearchResults()
+                fetchNextPageOfSearchResults()
                 numberPageOfSearchMoviesResult += 1
                 collectionView?.reloadData()
             }
@@ -142,3 +150,23 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+//MARK: - Searching movie
+extension ViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+       // timer?.invalidate()
+       // timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
+            if searchText != "" {
+                self.movieModel.fetchResultOfSearchBar(searchText: searchText, pageNumber: self.numberPageOfSearchMoviesResult) { searchedMovies in
+                    guard let searchedMovies = searchedMovies else { return }
+                    self.moviesArray = searchedMovies
+                    self.collectionView?.reloadData()
+                    self.searchText = searchText
+                }
+            } else {
+                self.numberPageOfMoviesResult = 1
+                self.moviesArray?.results.removeAll()
+                self.loadMoviesData()
+            }
+       // })
+    }
+}

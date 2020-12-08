@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3809A0DF0EE0A64F2787C6DDDB016158"
-               BuildableName = "Pods_MovieApp.framework"
-               BlueprintName = "Pods-MovieApp"
-               ReferencedContainer = "container:Pods.xcodeproj">
+               BlueprintIdentifier = "FA8614C025495D9600B600C8"
+               BuildableName = "MovieApp.app"
+               BlueprintName = "MovieApp"
+               ReferencedContainer = "container:MovieApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,6 +40,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "FA8614C025495D9600B600C8"
+            BuildableName = "MovieApp.app"
+            BlueprintName = "MovieApp"
+            ReferencedContainer = "container:MovieApp.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -47,6 +57,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "FA8614C025495D9600B600C8"
+            BuildableName = "MovieApp.app"
+            BlueprintName = "MovieApp"
+            ReferencedContainer = "container:MovieApp.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

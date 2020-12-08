@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import Realm
-import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = ViewController()
         window?.rootViewController = UINavigationController(rootViewController: vc)
         
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+       // print(Realm.Configuration.defaultConfiguration.fileURL)
+       // FirebaseApp.configure()
         return true
     }
 }
