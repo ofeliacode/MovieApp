@@ -11,13 +11,13 @@ import Foundation
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     //MARK: - Variables
-    let searchController = UISearchController(searchResultsController: nil)
-    var movieModel = MovieViewModel()
-    var moviesArray: MoviesData?
-    var collectionView : UICollectionView?
-    var numberPageOfMoviesResult: Int = 1
-    var numberPageOfSearchMoviesResult: Int = 1
-    var searchText: String = ""
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var movieModel = MovieViewModel()
+    private var moviesArray: MoviesData?
+    private var collectionView : UICollectionView?
+    private var numberPageOfMoviesResult: Int = 1
+    private var numberPageOfSearchMoviesResult: Int = 1
+    private var searchText: String = ""
     private var timer: Timer?
     
    //MARK: -  override
@@ -30,7 +30,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         showSearchBar()
         setupCollectionview()
         loadMoviesData()
-        title = "Movie app"
+        title = "Search"
     }
   //MARK: - Functions
     private func showSearchBar() {
@@ -44,7 +44,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     //MARK: - Setup Collectionview
     func setupCollectionview() {
-        super.loadView()
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -114,6 +113,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let detailVC = DetailViewController()
+        guard let selectedMovie = moviesArray?.results[indexPath.row] else {return}
+        print("didselect")
+        detailVC.selectedTitle = selectedMovie.title
+        detailVC.selectedImage = selectedMovie.posterImage
+        detailVC.selectedDescription = selectedMovie.overview
+        detailVC.selectedReleaseDateOfMovie = selectedMovie.year
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
      func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
@@ -156,11 +167,11 @@ extension ViewController: UISearchBarDelegate {
        // timer?.invalidate()
        // timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
             if searchText != "" {
-                self.movieModel.fetchResultOfSearchBar(searchText: searchText, pageNumber: self.numberPageOfSearchMoviesResult) { searchedMovies in
+                self.movieModel.fetchResultOfSearchBar(searchText: searchText, pageNumber: self.numberPageOfSearchMoviesResult) { [weak self] searchedMovies in
                     guard let searchedMovies = searchedMovies else { return }
-                    self.moviesArray = searchedMovies
-                    self.collectionView?.reloadData()
-                    self.searchText = searchText
+                    self?.moviesArray = searchedMovies
+                    self?.collectionView?.reloadData()
+                    self?.searchText = searchText
                 }
             } else {
                 self.numberPageOfMoviesResult = 1

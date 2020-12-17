@@ -15,8 +15,9 @@ struct Movie:  Codable {
    var year: String?
    var posterImage: String?
    var overview: String?
+   var id: Int?
     private enum CodingKeys: String, CodingKey {
-        case title, overview
+        case title, overview, id
         case year = "release_date"
         case posterImage = "poster_path"
     }

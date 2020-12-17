@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class MovieViewModel {
    private var moviesManager = MovieManager()
@@ -68,6 +69,22 @@ class MovieViewModel {
             }
         }
     }
+    func downloadPosterImage(posterPath: String, completion: @escaping (_ image: UIImage)->()) {
+        var components = URLComponents()
+        components.scheme = urlScheme
+        components.host = "image.tmdb.org"
+        components.path = "/t/p/w500"+posterPath
+        guard let url = components.url else { return }
+        let session = URLSession.shared
+        session.dataTask(with: url) { (data, response, error) in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    completion(image)
+                }
+            }
+        } .resume()
+    }
+    
 
    /* // fetch detail info about selected movie
     func fetchDetailsInfoOfSelectedMovie(movieId: Int, completion: @escaping (MovieDetails?) -> Void) {
