@@ -1,6 +1,6 @@
 # MovieApp
 
-iOS App: MovieApp is an app that allows users to browse movies from the The Movie Database API.
+MovieApp is an app that allows users to browse movies from the The Movie Database API.
 
 Fetching data from the API using Codable protocol. Resolved by appropriately mocking the data in the codable struct inline with the JSON response.
 
